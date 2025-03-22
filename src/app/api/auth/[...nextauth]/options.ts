@@ -24,14 +24,20 @@ export const authOptions: NextAuthOptions = {
                 const user = await User.findOne({ email: credentials?.email });
                 if (!user) throw new Error('User not found');
 
-                const isValid = await bcrypt.compare(credentials.password, user.password);
-                if (!isValid) throw new Error('Invalid password');
+                // const isValid = await bcrypt.compare(credentials.password, user.password);
+                // console.log('isValid: ', isValid);
+                // if (!isValid) throw new Error('Invalid password');
 
-                return { ...user.toObject(), redirect: false }; 
-                // return user;
+                // return { ...user.toObject(), redirect: false }; 
+                console.log('user: ', user);
+                return user;
+                
             },
         }),
     ],
+    pages: {
+        signIn: "/sign-in", // Custom login page to prevent automatic redirects
+    },
     callbacks: {
         async jwt({ token, user }) {
             if (user) token.user = user;
